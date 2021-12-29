@@ -44,7 +44,6 @@
     ]
   },
   "devDependencies": {
-    "@prismicio/types": "^0.1.21",
     "@types/firebase": "^3.2.1",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
