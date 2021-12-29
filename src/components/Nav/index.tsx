@@ -6,7 +6,7 @@ export const Nav = () => (
       <a href="#">Logo da twitch</a>
       <button
         type="button"
-        className="p-1 text-slate-900 rounded-md border-2 border-slate-900 w-16 hover:bg-slate-900 hover:text-white"
+        className="p-1 text-slate-900 rounded-md border-2 border-slate-900 w-32 hover:bg-slate-900 hover:text-white"
       >
         Login
       </button>

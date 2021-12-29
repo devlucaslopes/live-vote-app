@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Nav } from '../Nav'
+import { Header } from '../Header'
 
 type LayoutProps = {
   children: React.ReactNode
@@ -11,7 +12,7 @@ export const Layout = ({ children }: LayoutProps) => {
     <div className="h-screen bg-slate-900">
       <Nav />
       <div className="container mx-auto py-4">
-        <h1 className="text-4xl text-white">Lista de votação</h1>
+        <Header>Lista de votação</Header>
 
         {children}
       </div>
