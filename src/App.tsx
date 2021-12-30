@@ -9,6 +9,11 @@ function App() {
     <Layout>
       <SuggestionList>
         <SuggestionItem />
+        <SuggestionItem />
+        <SuggestionItem />
+        <SuggestionItem />
+        <SuggestionItem />
+        <SuggestionItem />
       </SuggestionList>
     </Layout>
   )

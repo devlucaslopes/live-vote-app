@@ -12,8 +12,12 @@ export const SuggestionItem = () => {
         <span className="text-lg">10</span>
       </button>
       <div className="flex flex-col justify-center">
-        <h2 className="text-xl text-fuchsia-500">Curso de HTML e CSS</h2>
-        <p>Criar um curso para iniciantes no FrontEnd</p>
+        <h2 className="text-xl text-fuchsia-500 select-none">
+          Curso de HTML e CSS
+        </h2>
+        <p className="select-none">
+          Criar um curso para iniciantes no FrontEnd
+        </p>
       </div>
     </section>
   )
