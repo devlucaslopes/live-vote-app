@@ -4,7 +4,7 @@ import { collection, getDocs, getFirestore } from 'firebase/firestore'
 import { SuggestionData } from '../../models/Suggestion'
 
 const config = {
-  apiKey: 'AIzaSyCZF4-vIxiwZHHpfzswIrnQEWWGG04Po3o',
+  apiKey: process.env.FIREBASE_API,
   authDomain: 'vote-app-bd79b.firebaseapp.com',
   projectId: 'vote-app-bd79b',
   storageBucket: 'vote-app-bd79b.appspot.com',
