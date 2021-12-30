@@ -15,23 +15,32 @@ export const Nav = () => (
         rel="noreferrer"
         title="Ir para canal da Twitch"
       >
-        <img src="./avatar.png" alt="@devlucaslopes" className="w-12 mr-4" />
+        <img src="./avatar.png" alt="avatar da twitch" className="w-12 mr-4" />
         Aprenda programação ao vivo!
       </a>
 
       <ul className="flex gap-4">
         <li>
-          <a href="#" title="Ir para perfil no Instagram">
+          <a
+            href="https://www.instagram.com/devlucaslopes/"
+            title="Ir para perfil no Instagram"
+          >
             <InstagramIcon size={24} />
           </a>
         </li>
         <li>
-          <a href="#" title="Ir para canal no Youtube">
+          <a
+            href="https://www.youtube.com/channel/UCh9vtTY15vToM0vWjgfq8WQ"
+            title="Ir para canal no Youtube"
+          >
             <YoutubeIcon size={24} />
           </a>
         </li>
         <li>
-          <a href="#" title="Ir para perfil no Github">
+          <a
+            href="https://github.com/devlucaslopes"
+            title="Ir para perfil no Github"
+          >
             <GithubIcon size={24} />
           </a>
         </li>
