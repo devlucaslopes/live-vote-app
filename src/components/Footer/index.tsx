@@ -1,15 +1,15 @@
 import React from 'react'
 
 export const Footer = () => (
-  <footer className="p-2 bg-pink-500 top-10">
-    <div className="flex justify-center">
+  <footer className="h-8 py-1 bg-pink-500">
+    <div className="flex justify-center" data-testid="footer-content">
       <a
-        href="https://www.instagram.com/devlucaslopes/"
-        className=" hover:font-medium"
+        href="http://twitch.tv/devlucaslopes"
         target="_blank"
         rel="noreferrer"
+        className="text-slate-900"
       >
-        Criado por: @devlucaslopes
+        Criado por @devlucaslopes
       </a>
     </div>
   </footer>

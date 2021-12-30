@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Footer /> should render correctly 1`] = `
+<div>
+  <footer
+    class="h-8 py-1 bg-pink-500"
+  >
+    <div
+      class="flex justify-center"
+      data-testid="footer-content"
+    >
+      <a
+        class="text-slate-900"
+        href="http://twitch.tv/devlucaslopes"
+        rel="noreferrer"
+        target="_blank"
+      >
+        Criado por @devlucaslopes
+      </a>
+    </div>
+  </footer>
+</div>
+`;

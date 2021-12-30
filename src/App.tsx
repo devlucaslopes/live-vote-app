@@ -13,7 +13,6 @@ function App() {
         <SuggestionItem />
         <SuggestionItem />
         <SuggestionItem />
-        <SuggestionItem />
       </SuggestionList>
     </Layout>
   )

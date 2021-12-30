@@ -18,7 +18,7 @@ describe('<Nav />', () => {
       screen.getByRole('img', { name: /avatar da twitch/i })
     ).toHaveProperty('src', 'http://localhost/avatar.png')
   })
-  fit('should render list with 3 links', () => {
+  it('should render list with 3 links', () => {
     render(<Nav />)
 
     expect(screen.getAllByRole('listitem').length).toBe(3)
