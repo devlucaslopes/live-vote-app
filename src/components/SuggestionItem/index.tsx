@@ -12,7 +12,7 @@ export const SuggestionItem = () => {
         <span className="text-lg">10</span>
       </button>
       <div className="flex flex-col justify-center">
-        <h2 className="text-xl text-fuchsia-500 select-none">
+        <h2 className="text-xl text-pink-500 font-medium select-none">
           Curso de HTML e CSS
         </h2>
         <p className="select-none">
