@@ -5,5 +5,9 @@ type SuggestionListProps = {
 }
 
 export const SuggestionList = ({ children }: SuggestionListProps) => {
-  return <div className="mt-8 animate-bottomUp">{children}</div>
+  return (
+    <div data-testid="suggestion-list" className="mt-8 animate-bottomUp">
+      {children}
+    </div>
+  )
 }
