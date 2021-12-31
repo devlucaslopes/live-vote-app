@@ -12,7 +12,7 @@ type SuggestionItemProps = {
 }
 
 export const SuggestionItem = ({ suggestion, onVote }: SuggestionItemProps) => {
-  const [totalVotes, setTotalVotes] = useState(suggestion.votes)
+  const [totalVotes, setTotalVotes] = useState(() => suggestion.votes)
 
   const handleVote = () => {
     const updatedVotes = totalVotes + 1
