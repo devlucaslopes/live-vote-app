@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import axios from 'axios'
 
 import { Layout } from './components/Layout'
 import { SuggestionList } from './components/SuggestionList'
 import { SuggestionItem } from './components/SuggestionItem'
 
 function App() {
+  useEffect(() => {
+    axios.get('/api/suggestions').then((res) => console.log(res))
+  }, [])
+
   const onVote = (id: number, votes: number) => console.log({ id, votes })
 
   return (
