@@ -1,29 +1,32 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
+import { SuggestionData } from './models/Suggestion'
 import { Layout } from './components/Layout'
 import { SuggestionList } from './components/SuggestionList'
 import { SuggestionItem } from './components/SuggestionItem'
 
 function App() {
+  const [suggestions, setSuggestions] = useState<SuggestionData[]>([])
+
   useEffect(() => {
-    axios.get('/api/suggestions').then((res) => console.log(res))
+    axios.get('/api/suggestions').then(({ data }) => {
+      setSuggestions(data.suggestions)
+    })
   }, [])
 
-  const onVote = (id: number, votes: number) => console.log({ id, votes })
+  const onVote = (id: string, votes: number) => console.log({ id, votes })
 
   return (
     <Layout>
       <SuggestionList>
-        <SuggestionItem
-          suggestion={{
-            id: 1,
-            title: 'Cursou de HTML',
-            description: 'Gravar um curso de HTML para iniciantes',
-            votes: 5
-          }}
-          onVote={onVote}
-        />
+        {suggestions.map((suggestion) => (
+          <SuggestionItem
+            key={suggestion.id}
+            suggestion={suggestion}
+            onVote={onVote}
+          />
+        ))}
       </SuggestionList>
     </Layout>
   )

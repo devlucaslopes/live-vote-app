@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 
 import { Nav } from '../Nav'
 import { Header } from '../Header'
@@ -20,7 +21,9 @@ export const Layout = ({ children }: LayoutProps) => {
 
   const handleNewSuggestion = () => setShowNewSuggestion(!showNewSuggestion)
 
-  const onSubmit = (data: NewSuggestionData) => console.log(data)
+  const onSubmit = (data: NewSuggestionData) => {
+    axios.post('/api/suggestions', data).then((res) => console.log(res))
+  }
 
   return (
     <div className="h-full bg-slate-900 relative">

@@ -1,14 +1,11 @@
 import React, { useState } from 'react'
 import { FiThumbsUp as VoteIcon } from 'react-icons/fi'
 
+import { SuggestionData } from '../../models/Suggestion'
+
 type SuggestionItemProps = {
-  suggestion: {
-    id: number
-    title: string
-    description: string
-    votes: number
-  }
-  onVote: (id: number, votes: number) => void
+  suggestion: SuggestionData
+  onVote: (id: string, votes: number) => void
 }
 
 export const SuggestionItem = ({ suggestion, onVote }: SuggestionItemProps) => {

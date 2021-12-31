@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { SuggestionItem } from '.'
 
 const suggestion = {
-  id: 1,
+  id: '1',
   title: 'Cursou de HTML',
   description: 'Gravar um curso de HTML para iniciantes',
   votes: 5
