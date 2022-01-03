@@ -15,7 +15,9 @@ type SuggestionProviderProps = {
 
 type SuggestionContextProps = {
   suggestions: SuggestionData[]
+  newSuggestionIsVisible: boolean
   createSuggestion: (data: CreateSuggestionData) => Promise<void>
+  toggleNewSuggestion: () => void
 }
 
 export type CreateSuggestionData = {
@@ -27,6 +29,7 @@ export const SuggestionContext = createContext({} as SuggestionContextProps)
 
 export function SuggestionProvider({ children }: SuggestionProviderProps) {
   const [suggestions, setSuggestions] = useState<SuggestionData[]>([])
+  const [newSuggestionIsVisible, setNewSuggestionIsVisible] = useState(false)
 
   useEffect(() => {
     axios.get('/api/suggestions').then(({ data }) => {
@@ -42,8 +45,17 @@ export function SuggestionProvider({ children }: SuggestionProviderProps) {
     setSuggestions((prev) => [...prev, response.data])
   }
 
+  const toggleNewSuggestion = () => setNewSuggestionIsVisible((prev) => !prev)
+
   return (
-    <SuggestionContext.Provider value={{ suggestions, createSuggestion }}>
+    <SuggestionContext.Provider
+      value={{
+        suggestions,
+        createSuggestion,
+        newSuggestionIsVisible,
+        toggleNewSuggestion
+      }}
+    >
       {children}
     </SuggestionContext.Provider>
   )

@@ -1,20 +1,20 @@
 import React, { FormEvent, useState } from 'react'
 import { useSuggestion } from '../../contexts/SuggestionContext'
 
-type NewSuggestionProps = {
-  isVisible: boolean
-  onClose: () => void
-}
-
-export const NewSuggestion = ({ isVisible, onClose }: NewSuggestionProps) => {
+export const NewSuggestion = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
 
-  const { createSuggestion } = useSuggestion()
+  const {
+    createSuggestion,
+    newSuggestionIsVisible: isVisible,
+    toggleNewSuggestion
+  } = useSuggestion()
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
     createSuggestion({ title, description })
+    toggleNewSuggestion()
   }
 
   return (
@@ -78,7 +78,7 @@ export const NewSuggestion = ({ isVisible, onClose }: NewSuggestionProps) => {
               <button
                 type="button"
                 className="w-32 h-9 rounded-md text-red-500 border border-red-500 hover:bg-red-500 hover:text-white"
-                onClick={onClose}
+                onClick={toggleNewSuggestion}
               >
                 Fechar
               </button>

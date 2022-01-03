@@ -11,25 +11,16 @@ type LayoutProps = {
 }
 
 export const Layout = ({ children }: LayoutProps) => {
-  const [showNewSuggestion, setShowNewSuggestion] = useState(false)
-
-  const handleNewSuggestion = () => setShowNewSuggestion(!showNewSuggestion)
-
   return (
     <div className="h-full bg-slate-900 relative">
       <Nav />
       <div className="h-[calc(100vh-6rem)] container mx-auto py-4">
-        <Header openNewSuggestion={handleNewSuggestion}>
-          Próximos conteúdos
-        </Header>
+        <Header>Próximos conteúdos</Header>
 
         {children}
       </div>
       <Footer />
-      <NewSuggestion
-        isVisible={showNewSuggestion}
-        onClose={handleNewSuggestion}
-      />
+      <NewSuggestion />
     </div>
   )
 }
