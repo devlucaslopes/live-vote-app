@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React from 'react'
 
-import { SuggestionData } from './models/Suggestion'
 import { Layout } from './components/Layout'
 import { SuggestionList } from './components/SuggestionList'
 import { SuggestionItem } from './components/SuggestionItem'
+import { useSuggestion } from './contexts/SuggestionContext'
 
 function App() {
-  const [suggestions, setSuggestions] = useState<SuggestionData[]>([])
-
-  useEffect(() => {
-    axios.get('/api/suggestions').then(({ data }) => {
-      setSuggestions(data.suggestions)
-    })
-  }, [])
+  const { suggestions } = useSuggestion()
 
   const onVote = (id: string, votes: number) => console.log({ id, votes })
 

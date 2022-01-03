@@ -4,6 +4,8 @@ import reportWebVitals from './reportWebVitals'
 
 import './styles.css'
 import { makeServer } from './services/miragejs/server'
+import { SuggestionProvider } from './contexts/SuggestionContext'
+
 import App from './App'
 
 if (process.env.NODE_ENV === 'development') {
@@ -12,7 +14,9 @@ if (process.env.NODE_ENV === 'development') {
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <SuggestionProvider>
+      <App />
+    </SuggestionProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )

@@ -39,7 +39,7 @@ export function makeServer({ environment = 'test' } = {}) {
       this.post('/suggestions', (schema: any, request) => {
         const data = JSON.parse(request.requestBody)
 
-        return schema.db.suggestions.insert('suggestions', data)
+        return schema.db.suggestions.insert(data)
       })
     }
   })
