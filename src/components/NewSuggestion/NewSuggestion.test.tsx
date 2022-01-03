@@ -8,7 +8,7 @@ import { SuggestionProvider } from '../../contexts/SuggestionContext'
 import { makeServer } from '../../services/miragejs/server'
 import { Server } from 'miragejs'
 
-let isVisible = true
+const isVisible = true
 
 const onClose = jest.fn()
 
@@ -16,8 +16,8 @@ const onSubmit = jest.fn()
 
 const renderNewSuggestion = () => {
   return render(
-    <SuggestionProvider>
-      <NewSuggestion isVisible onClose={onClose} />
+    <SuggestionProvider options={{ visible: true }}>
+      <NewSuggestion />
     </SuggestionProvider>
   )
 }
@@ -39,10 +39,6 @@ describe('<NewSuggestion />', () => {
   })
 
   it('should call onClose() when button "Fechar" is clicked', () => {
-    onClose.mockImplementationOnce(() => {
-      isVisible = !isVisible
-    })
-
     const { rerender } = renderNewSuggestion()
 
     const button = screen.getByRole('button', { name: /fechar/i })
@@ -53,9 +49,11 @@ describe('<NewSuggestion />', () => {
 
     fireEvent.click(button)
 
-    expect(onClose).toHaveBeenCalledTimes(1)
-
-    rerender(<NewSuggestion isVisible={isVisible} onClose={onClose} />)
+    rerender(
+      <SuggestionProvider>
+        <NewSuggestion />
+      </SuggestionProvider>
+    )
 
     dialog = screen.getByTestId('dialog')
 

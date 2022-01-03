@@ -11,6 +11,10 @@ import { SuggestionData } from '../models/Suggestion'
 
 type SuggestionProviderProps = {
   children: ReactNode
+  options?: {
+    visible?: boolean
+    suggestions?: SuggestionData[]
+  }
 }
 
 type SuggestionContextProps = {
@@ -27,9 +31,16 @@ export type CreateSuggestionData = {
 
 export const SuggestionContext = createContext({} as SuggestionContextProps)
 
-export function SuggestionProvider({ children }: SuggestionProviderProps) {
-  const [suggestions, setSuggestions] = useState<SuggestionData[]>([])
-  const [newSuggestionIsVisible, setNewSuggestionIsVisible] = useState(false)
+export function SuggestionProvider({
+  children,
+  options
+}: SuggestionProviderProps) {
+  const [suggestions, setSuggestions] = useState<SuggestionData[]>(
+    () => options?.suggestions || []
+  )
+  const [newSuggestionIsVisible, setNewSuggestionIsVisible] = useState(
+    () => options?.visible || false
+  )
 
   useEffect(() => {
     axios.get('/api/suggestions').then(({ data }) => {

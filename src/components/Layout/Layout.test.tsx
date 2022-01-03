@@ -19,7 +19,11 @@ describe('<Layout />', () => {
   afterEach(() => server.shutdown())
 
   it('should open NewSuggestion dialog when "Nova sugestão" is clicked', () => {
-    render(<Layout>some test</Layout>)
+    render(
+      <SuggestionProvider>
+        <Layout>some test</Layout>
+      </SuggestionProvider>
+    )
 
     const dialog = screen.getByTestId('dialog')
 
