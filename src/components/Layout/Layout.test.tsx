@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event'
 import axios from 'axios'
 
 import { Layout } from '.'
+import { makeServer } from '../../services/miragejs/server'
+import { Server } from 'miragejs'
 
 jest.mock('axios', () => ({
   post: jest.fn()
@@ -12,6 +14,12 @@ jest.mock('../Nav', () => ({ Nav: () => <nav>nav mocked</nav> }))
 jest.mock('../Footer', () => ({ Footer: () => <footer>footer mocked</footer> }))
 
 describe('<Layout />', () => {
+  let server: Server
+
+  beforeEach(() => (server = makeServer({ environment: 'test' })))
+
+  afterEach(() => server.shutdown())
+
   it('should open NewSuggestion dialog when "Nova sugestão" is clicked', () => {
     render(<Layout>some test</Layout>)
 
@@ -26,7 +34,7 @@ describe('<Layout />', () => {
     expect(dialog).toHaveAttribute('open')
   })
 
-  it('should call axios.post with correct data', () => {
+  fit('should call axios.post with correct data', () => {
     const expectedURL = '/api/suggestions'
     const suggestion = {
       description: 'Bar',

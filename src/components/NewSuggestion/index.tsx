@@ -1,24 +1,20 @@
 import React, { FormEvent, useState } from 'react'
-
-import { NewSuggestionData } from '../Layout'
+import { useSuggestion } from '../../contexts/SuggestionContext'
 
 type NewSuggestionProps = {
   isVisible: boolean
   onClose: () => void
-  onSubmit: (data: NewSuggestionData) => void
 }
 
-export const NewSuggestion = ({
-  isVisible,
-  onClose,
-  onSubmit
-}: NewSuggestionProps) => {
+export const NewSuggestion = ({ isVisible, onClose }: NewSuggestionProps) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
 
+  const { createSuggestion } = useSuggestion()
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
-    onSubmit({ title, description })
+    createSuggestion({ title, description })
   }
 
   return (

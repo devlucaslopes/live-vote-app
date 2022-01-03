@@ -1,8 +1,12 @@
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import axios from 'axios'
 
 import { NewSuggestion } from '.'
+import { SuggestionProvider } from '../../contexts/SuggestionContext'
+import { makeServer } from '../../services/miragejs/server'
+import { Server } from 'miragejs'
 
 let isVisible = true
 
@@ -12,11 +16,19 @@ const onSubmit = jest.fn()
 
 const renderNewSuggestion = () => {
   return render(
-    <NewSuggestion isVisible onClose={onClose} onSubmit={onSubmit} />
+    <SuggestionProvider>
+      <NewSuggestion isVisible onClose={onClose} />
+    </SuggestionProvider>
   )
 }
 
 describe('<NewSuggestion />', () => {
+  let server: Server
+
+  beforeEach(() => (server = makeServer({ environment: 'test' })))
+
+  afterEach(() => server.shutdown())
+
   it('should render correctly', () => {
     renderNewSuggestion()
 
@@ -26,7 +38,7 @@ describe('<NewSuggestion />', () => {
     expect(screen.getAllByRole('button').length).toBe(2)
   })
 
-  it('should call onClose() when button "Fechar" is clicked', () => {
+  fit('should call onClose() when button "Fechar" is clicked', () => {
     onClose.mockImplementationOnce(() => {
       isVisible = !isVisible
     })
@@ -34,7 +46,7 @@ describe('<NewSuggestion />', () => {
     const { rerender } = renderNewSuggestion()
 
     const button = screen.getByRole('button', { name: /fechar/i })
-    const dialog = screen.getByTestId('dialog')
+    let dialog = screen.getByTestId('dialog')
 
     expect(dialog).not.toHaveClass('hidden')
     expect(dialog).toHaveAttribute('open')
@@ -43,14 +55,11 @@ describe('<NewSuggestion />', () => {
 
     expect(onClose).toHaveBeenCalledTimes(1)
 
-    rerender(
-      <NewSuggestion
-        isVisible={isVisible}
-        onClose={onClose}
-        onSubmit={onSubmit}
-      />
-    )
+    rerender(<NewSuggestion isVisible={isVisible} onClose={onClose} />)
 
+    dialog = screen.getByTestId('dialog')
+
+    expect(dialog).toHaveClass('hidden')
     expect(dialog).not.toHaveAttribute('open')
   })
 
@@ -73,6 +82,8 @@ describe('<NewSuggestion />', () => {
   })
 
   it('should call onSubmit() when button "Adicionar" is clicked', () => {
+    const postSpy = jest.spyOn(axios, 'post')
+
     renderNewSuggestion()
 
     const [inputTitle, inputDescription] = screen.getAllByRole('textbox')
@@ -82,7 +93,6 @@ describe('<NewSuggestion />', () => {
     userEvent.type(inputDescription, 'Bar')
     fireEvent.click(button)
 
-    expect(onSubmit).toHaveBeenCalledTimes(1)
-    expect(onSubmit).toHaveBeenCalledWith({ title: 'Foo', description: 'Bar' })
+    expect(postSpy).toHaveBeenCalledTimes(1)
   })
 })
