@@ -11,6 +11,10 @@ import { SuggestionData } from '../models/Suggestion'
 
 type SuggestionProviderProps = {
   children: ReactNode
+  mock?: {
+    visible?: boolean
+    suggestions?: SuggestionData[]
+  }
 }
 
 type SuggestionContextProps = {
@@ -27,22 +31,29 @@ export type CreateSuggestionData = {
 
 export const SuggestionContext = createContext({} as SuggestionContextProps)
 
-export function SuggestionProvider({ children }: SuggestionProviderProps) {
-  const [suggestions, setSuggestions] = useState<SuggestionData[]>([])
-  const [newSuggestionIsVisible, setNewSuggestionIsVisible] = useState(false)
+export function SuggestionProvider({
+  children,
+  mock
+}: SuggestionProviderProps) {
+  const [suggestions, setSuggestions] = useState<SuggestionData[]>(
+    () => mock?.suggestions || []
+  )
+  const [newSuggestionIsVisible, setNewSuggestionIsVisible] = useState(
+    () => mock?.visible || false
+  )
 
   useEffect(() => {
     axios.get('/api/suggestions').then(({ data }) => {
-      if (data.suggestions.length > 0) {
-        setSuggestions(data.suggestions)
-      }
+      setSuggestions(data.suggestions)
     })
   }, [])
 
   const createSuggestion = async (data: CreateSuggestionData) => {
-    const response = await axios.post('/api/suggestions', data)
+    const {
+      data: { suggestion }
+    } = await axios.post('/api/suggestions', data)
 
-    setSuggestions((prev) => [...prev, response.data])
+    setSuggestions((prev) => [...prev, { ...suggestion, votes: 0 }])
   }
 
   const toggleNewSuggestion = () => setNewSuggestionIsVisible((prev) => !prev)

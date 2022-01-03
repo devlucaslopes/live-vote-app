@@ -1,4 +1,4 @@
-import { createServer, Model } from 'miragejs'
+import { createServer, Factory, Model } from 'miragejs'
 
 export function makeServer({ environment = 'test' } = {}) {
   const server = createServer({
@@ -8,29 +8,26 @@ export function makeServer({ environment = 'test' } = {}) {
       suggestion: Model
     },
 
-    seeds(server) {
-      server.db.loadData({
-        suggestions: [
-          {
-            id: '1',
-            title: 'Cursou de HTML',
-            description: 'Gravar um curso de HTML para iniciantes',
-            votes: 0
-          },
-          {
-            id: '2',
-            title: 'Fazer um video sobre Web3.js',
-            description: 'Gravar um vídeo sobre blockchain no frontend',
-            votes: 0
-          }
-        ]
+    factories: {
+      suggestion: Factory.extend({
+        title(i) {
+          return `Tema ${i}`
+        },
+        description(i) {
+          return `Fazer uma live ou vídeo sobre tema ${i}`
+        },
+        votes() {
+          return 0
+        }
       })
+    },
+
+    seeds(server) {
+      server.create('suggestion')
     },
 
     routes() {
       this.namespace = 'api'
-
-      // this.resource('suggestions')
 
       this.get('/suggestions', (schema: any) => {
         return schema.suggestions.all()
@@ -39,7 +36,7 @@ export function makeServer({ environment = 'test' } = {}) {
       this.post('/suggestions', (schema: any, request) => {
         const data = JSON.parse(request.requestBody)
 
-        return schema.db.suggestions.insert(data)
+        return schema.suggestions.create(data)
       })
     }
   })

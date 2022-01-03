@@ -1,23 +1,17 @@
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Server } from 'miragejs'
 import axios from 'axios'
 
 import { NewSuggestion } from '.'
 import { SuggestionProvider } from '../../contexts/SuggestionContext'
 import { makeServer } from '../../services/miragejs/server'
-import { Server } from 'miragejs'
-
-let isVisible = true
-
-const onClose = jest.fn()
-
-const onSubmit = jest.fn()
 
 const renderNewSuggestion = () => {
   return render(
-    <SuggestionProvider>
-      <NewSuggestion isVisible onClose={onClose} />
+    <SuggestionProvider mock={{ visible: true }}>
+      <NewSuggestion />
     </SuggestionProvider>
   )
 }
@@ -39,10 +33,6 @@ describe('<NewSuggestion />', () => {
   })
 
   it('should call onClose() when button "Fechar" is clicked', () => {
-    onClose.mockImplementationOnce(() => {
-      isVisible = !isVisible
-    })
-
     const { rerender } = renderNewSuggestion()
 
     const button = screen.getByRole('button', { name: /fechar/i })
@@ -53,9 +43,11 @@ describe('<NewSuggestion />', () => {
 
     fireEvent.click(button)
 
-    expect(onClose).toHaveBeenCalledTimes(1)
-
-    rerender(<NewSuggestion isVisible={isVisible} onClose={onClose} />)
+    rerender(
+      <SuggestionProvider>
+        <NewSuggestion />
+      </SuggestionProvider>
+    )
 
     dialog = screen.getByTestId('dialog')
 
