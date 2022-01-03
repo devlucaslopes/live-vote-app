@@ -38,7 +38,7 @@ describe('<NewSuggestion />', () => {
     expect(screen.getAllByRole('button').length).toBe(2)
   })
 
-  fit('should call onClose() when button "Fechar" is clicked', () => {
+  it('should call onClose() when button "Fechar" is clicked', () => {
     onClose.mockImplementationOnce(() => {
       isVisible = !isVisible
     })

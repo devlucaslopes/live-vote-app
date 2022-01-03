@@ -6,10 +6,8 @@ import axios from 'axios'
 import { Layout } from '.'
 import { makeServer } from '../../services/miragejs/server'
 import { Server } from 'miragejs'
+import { SuggestionProvider } from '../../contexts/SuggestionContext'
 
-jest.mock('axios', () => ({
-  post: jest.fn()
-}))
 jest.mock('../Nav', () => ({ Nav: () => <nav>nav mocked</nav> }))
 jest.mock('../Footer', () => ({ Footer: () => <footer>footer mocked</footer> }))
 
@@ -34,14 +32,20 @@ describe('<Layout />', () => {
     expect(dialog).toHaveAttribute('open')
   })
 
-  fit('should call axios.post with correct data', () => {
+  it('should call axios.post with correct data', () => {
+    const postSpy = jest.spyOn(axios, 'post')
+
     const expectedURL = '/api/suggestions'
     const suggestion = {
       description: 'Bar',
       title: 'Foo'
     }
 
-    render(<Layout>some test</Layout>)
+    render(
+      <SuggestionProvider>
+        <Layout>some test</Layout>
+      </SuggestionProvider>
+    )
 
     fireEvent.click(screen.getByRole('button', { name: /nova sugestão/i }))
 
@@ -52,7 +56,7 @@ describe('<Layout />', () => {
     userEvent.type(inputDescription, suggestion.description)
     fireEvent.click(button)
 
-    expect(axios.post).toHaveBeenCalled()
-    expect(axios.post).toHaveBeenCalledWith(expectedURL, suggestion)
+    expect(postSpy).toHaveBeenCalled()
+    expect(postSpy).toHaveBeenCalledWith(expectedURL, suggestion)
   })
 })
