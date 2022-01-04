@@ -1,21 +1,22 @@
 import React, { useState } from 'react'
 import { FiThumbsUp as VoteIcon } from 'react-icons/fi'
+import { useSuggestion } from '../../contexts/SuggestionContext'
 
 import { SuggestionData } from '../../models/Suggestion'
 
 type SuggestionItemProps = {
   suggestion: SuggestionData
-  onVote: (id: string, votes: number) => void
 }
 
-export const SuggestionItem = ({ suggestion, onVote }: SuggestionItemProps) => {
+export const SuggestionItem = ({ suggestion }: SuggestionItemProps) => {
+  const { addVote } = useSuggestion()
   const [totalVotes, setTotalVotes] = useState(() => suggestion.votes)
 
   const handleVote = () => {
     const updatedVotes = totalVotes + 1
 
     setTotalVotes(updatedVotes)
-    onVote(suggestion.id, updatedVotes)
+    addVote({ id: suggestion.id, votes: updatedVotes })
   }
 
   return (

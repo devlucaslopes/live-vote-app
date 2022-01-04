@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState
 } from 'react'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 import { SuggestionData } from '../models/Suggestion'
 
@@ -17,16 +17,22 @@ type SuggestionProviderProps = {
   }
 }
 
+export type CreateSuggestionData = {
+  title: string
+  description: string
+}
+
+export type AddVoteProps = {
+  id: string
+  votes: number
+}
+
 type SuggestionContextProps = {
   suggestions: SuggestionData[]
   newSuggestionIsVisible: boolean
   createSuggestion: (data: CreateSuggestionData) => Promise<void>
+  addVote: (data: AddVoteProps) => Promise<Response>
   toggleNewSuggestion: () => void
-}
-
-export type CreateSuggestionData = {
-  title: string
-  description: string
 }
 
 export const SuggestionContext = createContext({} as SuggestionContextProps)
@@ -56,6 +62,19 @@ export function SuggestionProvider({
     setSuggestions((prev) => [...prev, { ...suggestion, votes: 0 }])
   }
 
+  const addVote = async ({ id, votes }: AddVoteProps) => {
+    try {
+      const suggestion = await axios.put(`api/suggestions/${id}`, { votes })
+
+      return new Response(200, {}, suggestion)
+    } catch (error) {
+      const { response } = error as AxiosError
+      const status = response?.status || 400
+
+      return new Response(status, {}, 'Something wrong')
+    }
+  }
+
   const toggleNewSuggestion = () => setNewSuggestionIsVisible((prev) => !prev)
 
   return (
@@ -63,6 +82,7 @@ export function SuggestionProvider({
       value={{
         suggestions,
         createSuggestion,
+        addVote,
         newSuggestionIsVisible,
         toggleNewSuggestion
       }}

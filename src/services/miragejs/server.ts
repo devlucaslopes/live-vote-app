@@ -38,6 +38,13 @@ export function makeServer({ environment = 'test' } = {}) {
 
         return schema.suggestions.create(data)
       })
+
+      this.put('/suggestions/:id', (schema: any, request) => {
+        const id = request.params.id
+        const data = JSON.parse(request.requestBody)
+
+        return schema.suggestions.find(id).update(data)
+      })
     }
   })
 

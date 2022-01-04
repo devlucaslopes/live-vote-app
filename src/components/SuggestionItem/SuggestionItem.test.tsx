@@ -1,5 +1,8 @@
 import React from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
+import axios from 'axios'
+
+import { renderWithProvider } from '../../utils/helpers/renderWithProvider'
 import { SuggestionItem } from '.'
 
 const suggestion = {
@@ -9,11 +12,9 @@ const suggestion = {
   votes: 5
 }
 
-const onVote = jest.fn()
-
 describe('<SuggestionItem />', () => {
   beforeEach(() =>
-    render(<SuggestionItem suggestion={suggestion} onVote={onVote} />)
+    renderWithProvider(<SuggestionItem suggestion={suggestion} />)
   )
 
   it('should render correcly', () => {
@@ -33,13 +34,14 @@ describe('<SuggestionItem />', () => {
   })
 
   it('should call onVote() when button is clicked', () => {
-    const expectedTotalVotes = 6
+    const putSpy = jest.spyOn(axios, 'put')
+
     const button = screen.getByRole('button')
 
     fireEvent.click(button)
 
-    expect(onVote).toHaveBeenCalledTimes(1)
-    expect(onVote).toHaveBeenCalledWith(suggestion.id, expectedTotalVotes)
+    expect(putSpy).toHaveBeenCalledTimes(1)
+    expect(putSpy).toHaveBeenCalledWith('api/suggestions/1', { votes: 6 })
     expect(screen.getByTestId('total-votes').textContent).toBe('6')
   })
 })
