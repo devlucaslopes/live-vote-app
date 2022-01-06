@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { FiThumbsUp as VoteIcon } from 'react-icons/fi'
 import { useSuggestion } from '../../contexts/SuggestionContext'
 
@@ -10,13 +10,9 @@ type SuggestionItemProps = {
 
 export const SuggestionItem = ({ suggestion }: SuggestionItemProps) => {
   const { addVote } = useSuggestion()
-  const [totalVotes, setTotalVotes] = useState(() => suggestion.votes)
 
   const handleVote = () => {
-    const updatedVotes = totalVotes + 1
-
-    setTotalVotes(updatedVotes)
-    addVote({ id: suggestion.id, votes: updatedVotes })
+    addVote({ id: suggestion.id })
   }
 
   return (
@@ -28,7 +24,7 @@ export const SuggestionItem = ({ suggestion }: SuggestionItemProps) => {
       >
         <VoteIcon size={24} />
         <span data-testid="total-votes" className="text-lg">
-          {totalVotes}
+          {suggestion.votes}
         </span>
       </button>
       <div className="flex flex-col justify-center">

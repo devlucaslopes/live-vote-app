@@ -41,7 +41,7 @@ describe('<NewSuggestion />', () => {
     expect(dialog).not.toHaveClass('hidden')
     expect(dialog).toHaveAttribute('open')
 
-    fireEvent.click(button)
+    userEvent.click(button)
 
     rerender(
       <SuggestionProvider>
@@ -83,8 +83,22 @@ describe('<NewSuggestion />', () => {
 
     userEvent.type(inputTitle, 'Foo')
     userEvent.type(inputDescription, 'Bar')
-    fireEvent.click(button)
+    userEvent.click(button)
 
     expect(postSpy).toHaveBeenCalledTimes(1)
+  })
+
+  it('should display error message if title or description is empty', () => {
+    const postSpy = jest.spyOn(axios, 'post')
+
+    renderNewSuggestion()
+
+    const button = screen.getByRole('button', { name: /adicionar/i })
+    userEvent.click(button)
+
+    expect(postSpy).not.toHaveBeenCalled()
+    expect(
+      screen.getByText(/Preencha todos os campos corretamente/i)
+    ).toBeInTheDocument()
   })
 })

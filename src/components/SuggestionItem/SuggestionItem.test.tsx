@@ -1,9 +1,11 @@
 import React from 'react'
-import { fireEvent, screen } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { Response, Server } from 'miragejs'
 import axios from 'axios'
 
 import { renderWithProvider } from '../../utils/helpers/renderWithProvider'
 import { SuggestionItem } from '.'
+import { makeServer } from '../../services/miragejs/server'
 
 const suggestion = {
   id: '1',
@@ -13,6 +15,12 @@ const suggestion = {
 }
 
 describe('<SuggestionItem />', () => {
+  let server: Server
+
+  beforeEach(() => (server = makeServer({ environment: 'test' })))
+
+  afterEach(() => server.shutdown())
+
   beforeEach(() =>
     renderWithProvider(<SuggestionItem suggestion={suggestion} />)
   )
@@ -33,15 +41,20 @@ describe('<SuggestionItem />', () => {
     )
   })
 
-  it('should call onVote() when button is clicked', () => {
+  it('should call axios.put when user vote', async () => {
     const putSpy = jest.spyOn(axios, 'put')
 
-    const button = screen.getByRole('button')
-
-    fireEvent.click(button)
+    await waitFor(() => fireEvent.click(screen.getByRole('button')))
 
     expect(putSpy).toHaveBeenCalledTimes(1)
-    expect(putSpy).toHaveBeenCalledWith('api/suggestions/1', { votes: 6 })
-    expect(screen.getByTestId('total-votes').textContent).toBe('6')
+    expect(putSpy).toHaveBeenCalledWith('api/suggestions/1')
+  })
+
+  it('should not update vote value if request fails', async () => {
+    server.put('/products/:id', () => new Response(500, {}, ''))
+
+    await waitFor(() => fireEvent.click(screen.getByRole('button')))
+
+    expect(screen.getByTestId('total-votes').textContent).toBe('5')
   })
 })

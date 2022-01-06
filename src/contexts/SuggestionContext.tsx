@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState
 } from 'react'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 
 import { SuggestionData } from '../models/Suggestion'
 
@@ -24,14 +24,14 @@ export type CreateSuggestionData = {
 
 export type AddVoteProps = {
   id: string
-  votes: number
 }
 
 type SuggestionContextProps = {
   suggestions: SuggestionData[]
+  hasError: boolean
   newSuggestionIsVisible: boolean
   createSuggestion: (data: CreateSuggestionData) => Promise<void>
-  addVote: (data: AddVoteProps) => Promise<Response>
+  addVote: (data: AddVoteProps) => Promise<void>
   toggleNewSuggestion: () => void
 }
 
@@ -48,30 +48,52 @@ export function SuggestionProvider({
     () => mock?.visible || false
   )
 
+  const [hasError, setHasError] = useState(false)
+
   useEffect(() => {
-    axios.get('/api/suggestions').then(({ data }) => {
-      setSuggestions(data.suggestions)
-    })
+    setHasError(false)
+
+    axios
+      .get('/api/suggestions')
+      .then(({ data }) => {
+        setSuggestions(data.suggestions)
+      })
+      .catch((error) => {
+        setHasError(true)
+      })
+
+    return () => setSuggestions([])
   }, [])
 
   const createSuggestion = async (data: CreateSuggestionData) => {
-    const {
-      data: { suggestion }
-    } = await axios.post('/api/suggestions', data)
+    setHasError(false)
 
-    setSuggestions((prev) => [...prev, { ...suggestion, votes: 0 }])
+    try {
+      const {
+        data: { suggestion }
+      } = await axios.post('/api/suggestions', data)
+
+      setSuggestions((prev) => [...prev, { ...suggestion, votes: 0 }])
+    } catch (error) {
+      setHasError(true)
+    }
   }
 
-  const addVote = async ({ id, votes }: AddVoteProps) => {
+  const addVote = async ({ id }: AddVoteProps) => {
+    setHasError(false)
+
     try {
-      const suggestion = await axios.put(`api/suggestions/${id}`, { votes })
+      const { data } = await axios.put(`api/suggestions/${id}`)
 
-      return new Response(200, {}, suggestion)
+      const updatedSuggestion = data.suggestion
+
+      setSuggestions((prev) =>
+        prev.map((suggestion) =>
+          suggestion.id === id ? updatedSuggestion : suggestion
+        )
+      )
     } catch (error) {
-      const { response } = error as AxiosError
-      const status = response?.status || 400
-
-      return new Response(status, {}, 'Something wrong')
+      setHasError(true)
     }
   }
 
@@ -81,6 +103,7 @@ export function SuggestionProvider({
     <SuggestionContext.Provider
       value={{
         suggestions,
+        hasError,
         createSuggestion,
         addVote,
         newSuggestionIsVisible,

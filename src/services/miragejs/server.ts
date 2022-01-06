@@ -41,9 +41,14 @@ export function makeServer({ environment = 'test' } = {}) {
 
       this.put('/suggestions/:id', (schema: any, request) => {
         const id = request.params.id
-        const data = JSON.parse(request.requestBody)
 
-        return schema.suggestions.find(id).update(data)
+        const suggestion = schema.suggestions.find(id)
+
+        suggestion.update({
+          votes: suggestion.votes + 1
+        })
+
+        return suggestion
       })
     }
   })

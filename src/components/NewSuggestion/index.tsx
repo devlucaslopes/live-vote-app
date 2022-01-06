@@ -1,9 +1,12 @@
 import React, { FormEvent, useState } from 'react'
+import { FiXOctagon as ErrorIcon } from 'react-icons/fi'
+
 import { useSuggestion } from '../../contexts/SuggestionContext'
 
 export const NewSuggestion = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [hasError, setHasError] = useState(false)
 
   const {
     createSuggestion,
@@ -11,8 +14,22 @@ export const NewSuggestion = () => {
     toggleNewSuggestion
   } = useSuggestion()
 
+  const onClose = () => {
+    setTitle('')
+    setDescription('')
+    setHasError(false)
+    toggleNewSuggestion()
+  }
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
+    setHasError(false)
+
+    if (!title || !description) {
+      setHasError(true)
+      return
+    }
+
     createSuggestion({ title, description })
     toggleNewSuggestion()
   }
@@ -74,11 +91,18 @@ export const NewSuggestion = () => {
               />
             </label>
 
-            <div className="flex justify-between mt-4">
+            {hasError && (
+              <p className="flex items-center mt-2 text-red-500 text-sm">
+                <ErrorIcon className="mr-2" />
+                <span>Preencha todos os campos corretamente</span>
+              </p>
+            )}
+
+            <div className="flex justify-between mt-2">
               <button
                 type="button"
                 className="w-32 h-9 rounded-md text-red-500 border border-red-500 hover:bg-red-500 hover:text-white"
-                onClick={toggleNewSuggestion}
+                onClick={onClose}
               >
                 Fechar
               </button>
